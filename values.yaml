@@ -51,7 +51,7 @@ kanidm:
       # -- Enable/disable the use of an external certificate resource (mutually exclusive with `kanidm.tls.issuer`)
       # @default -- false
       # @section -- Kanidm Configuration (TLS)
-    enabled: false
+      enabled: false
     # -- Certificate issuer to use with ClusterIssuer/Issuer for cert generation (mutually exclusive with `kanidm.tls.externalCertificateSecret`)
     # @default -- {}
     # @section -- Kanidm Configuration (TLS)
