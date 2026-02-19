@@ -1,4 +1,4 @@
-{{ if eq (.Values.kanidm.tls.externalCertificateSecret.enabled | toString ) "false" }}
+{{ if .Values.kanidm.tls.externalCertificateSecret.enabled }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
