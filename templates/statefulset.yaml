@@ -130,7 +130,7 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.statefulset.storage.existingClaim | default "kanidm-data" }}
         {{- end }}
-        {{- if and (not .Values.statefulset.storage.existingClaim) (not Values.statefulset.storage.storageClass) }}
+        {{- if and (not .Values.statefulset.storage.existingClaim) (not .Values.statefulset.storage.storageClass) }}
         - name: data
           emptyDir: {}
         {{- end }}
