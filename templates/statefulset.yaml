@@ -120,15 +120,17 @@ spec:
         - name: config
           configMap:
             name: {{ include "kanidm.name" . }}-config
+        {{ if .Values.kanidm.tls.externalCertificateSecret.enabled }}
         - name: certificates
           secret:
             secretName: {{ include "kanidm.tlsSecretName" . }}
+        {{- end }} 
         {{- if .Values.statefulset.storage.existingClaim }}
         - name: data
           persistentVolumeClaim:
             claimName: {{ .Values.statefulset.storage.existingClaim | default "kanidm-data" }}
         {{- end }}
-        {{- if and (not .Values.statefulset.storage.existingClaim) (not .Values.statefulset.storage.volumeClaimTemplate) }}
+        {{- if not .Values.statefulset.storage.existingClaim) }}
         - name: data
           emptyDir: {}
         {{- end }}
