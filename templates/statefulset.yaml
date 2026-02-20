@@ -83,7 +83,7 @@ spec:
             {{- toYaml .Values.statefulset.extraPorts | nindent 12 }}
             {{- end }}
           volumeMounts:
-            - name: {{ include "kanidm.dataVolumeName" . }}
+            - name: kanidm-data
               mountPath: /data
             - name: config
               mountPath: /data/server.toml
@@ -139,7 +139,7 @@ spec:
   {{- if not .Values.statefulset.storage.existingClaim }}
   volumeClaimTemplates:
   - metadata:
-      name: kanidm-volume
+      name: kanidm-data
     spec:
       accessModes:
         - ReadWriteOnce
