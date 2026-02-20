@@ -48,17 +48,6 @@ TLS secret name
 {{- end }}
 
 {{/*
-Data volume name
-*/}}
-{{- define "kanidm.dataVolumeName" -}}
-{{- if .Values.statefulset.storage.volumeClaimTemplate }}
-{{- toYaml .Values.statefulset.storage.volumeClaimTemplate.metadata.name }}
-{{- else }}
-{{- printf "data" }}
-{{- end }}
-{{- end }}
-
-{{/*
 Service account name
 */}}
 {{- define "kanidm.serviceAccountName" -}}
