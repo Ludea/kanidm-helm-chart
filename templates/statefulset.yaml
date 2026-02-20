@@ -89,9 +89,11 @@ spec:
               mountPath: /data/server.toml
               subPath: server.toml
               readOnly: true
+            {{ if .Values.kanidm.tls.externalCertificateSecret.enabled }}
             - name: certificates
               mountPath: /certs
               readOnly: true
+            {{- end }} 
           securityContext:
             {{- if .Values.statefulset.containerSecurityContext }}
             {{ toYaml .Values.statefulset.containerSecurityContext | nindent 12 }}
