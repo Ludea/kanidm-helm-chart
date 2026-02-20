@@ -130,7 +130,7 @@ spec:
         {{- if or .Values.statefulset.storage.existingClaim .Values.statefulset.storage.storageClass }}
         - name: data
           persistentVolumeClaim:
-            claimName: {{ .Values.statefulset.storage.existingClaim | default "kanidm-data" }}
+            claimName: {{ .Values.statefulset.storage.existingClaim | default "kanidm-data-kanidm-0" }}
         {{- end }}
         {{- if and (not .Values.statefulset.storage.existingClaim) (not .Values.statefulset.storage.storageClass) }}
         - name: data
