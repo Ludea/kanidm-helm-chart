@@ -50,7 +50,7 @@ spec:
           image: "{{ .Values.statefulset.image.repository }}:{{ .Values.statefulset.image.tag }}"
           imagePullPolicy: {{ .Values.statefulset.image.pullPolicy }}
           command:
-            - /usr/sbin/kanidmd 
+            - kanidmd 
             - cert-generate
           volumeMounts:
             - name: kanidm-certs
