@@ -127,7 +127,7 @@ spec:
           secret:
             secretName: {{ include "kanidm.tlsSecretName" . }}
         {{- end }} 
-        {{- if .Values.statefulset.storage.existingClaim }}
+        {{- if or .Values.statefulset.storage.existingClaim .Values.statefulset.storage.storageClass }}
         - name: data
           persistentVolumeClaim:
             claimName: {{ .Values.statefulset.storage.existingClaim | default "kanidm-data" }}
