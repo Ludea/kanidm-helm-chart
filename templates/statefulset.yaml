@@ -44,6 +44,27 @@ spec:
         {{- toYaml .Values.statefulset.podSecurityContext | nindent 8 }}
       {{- end }}
 
+      {{- if not .Values.kanidm.tls.externalCertificateSecret.enabled }}
+      initContainers:
+        - name: generate-certs
+          image: "{{ .Values.statefulset.image.repository }}:{{ .Values.statefulset.image.tag }}"
+          imagePullPolicy: {{ .Values.statefulset.image.pullPolicy }}
+          command:
+            - sh
+            - -c
+            - |
+              if [ ! -f /certs/server.key ]; then
+                echo "Generating Kanidm TLS certificates..."
+                mkdir -p /certs
+                kanidmd cert-generate
+              else
+                echo "Certificates already exist, skipping."
+              fi
+          volumeMounts:
+            - name: kanidm-certs
+              mountPath: /certs
+      {{- end }}
+
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.statefulset.image.repository }}:{{ .Values.statefulset.image.tag }}"
@@ -93,6 +114,9 @@ spec:
             - name: kanidm-data
               mountPath: /data
 
+            - name: kanidm-certs
+              mountPath: /certs
+
             - name: config
               mountPath: /data/server.toml
               subPath: server.toml
@@ -135,13 +159,16 @@ spec:
           configMap:
             name: {{ include "kanidm.name" . }}-config
 
+        - name: kanidm-certs
+          persistentVolumeClaim:
+            claimName: {{ include "kanidm.name" . }}-certs
+
         {{- if .Values.kanidm.tls.externalCertificateSecret.enabled }}
         - name: certificates
           secret:
             secretName: {{ include "kanidm.tlsSecretName" . }}
         {{- end }}
 
-  {{- if not .Values.statefulset.storage.existingClaim }}
   volumeClaimTemplates:
     - metadata:
         name: kanidm-data
@@ -152,4 +179,13 @@ spec:
           requests:
             storage: {{ .Values.statefulset.storage.size }}
         storageClassName: {{ .Values.statefulset.storage.storageClass }}
-  {{- end }}
+
+    - metadata:
+        name: kanidm-certs
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: {{ .Values.statefulset.storage.storageClass }}
