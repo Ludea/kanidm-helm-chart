@@ -55,6 +55,10 @@ spec:
           volumeMounts:
             - name: kanidm-certs
               mountPath: /certs
+            - name: config
+              mountPath: /data/server.toml
+              subPath: server.toml
+              readOnly: true
       {{- end }}
 
       containers:
